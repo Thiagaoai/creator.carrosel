@@ -165,8 +165,8 @@ async def _on_approve(query: CallbackQuery, flow_id: str, payload: list[str]) ->
         return
 
     if action == "all":
-        await fsm.transition(flow_id, "approve_prompts")
-        await fsm.transition(flow_id, "start_images")
+        # Single transition to avoid double lock acquisition (PROMPTS_READY → GENERATING_IMAGES)
+        await fsm.transition(flow_id, "approve_and_start")
         await query.edit_message_text("Prompts aprovados. Gerando imagens...")
 
         from app.tasks.celery_app import celery_app
@@ -243,8 +243,8 @@ async def _on_regen(query: CallbackQuery, flow_id: str, payload: list[str]) -> N
         return
 
     if action == "all":
-        await fsm.transition(flow_id, "request_regen")
-        await fsm.transition(flow_id, "regen_done")
+        # Single transition to avoid double lock acquisition (IMAGES_APPROVED → GENERATING_IMAGES)
+        await fsm.transition(flow_id, "request_and_start_regen")
         await query.edit_message_text("Regenerando todas as imagens...")
 
         from app.tasks.celery_app import celery_app
@@ -260,8 +260,8 @@ async def _on_regen(query: CallbackQuery, flow_id: str, payload: list[str]) -> N
                 reply_markup=image_approval_keyboard(),
             )
             return
-        await fsm.transition(flow_id, "request_regen")
-        await fsm.transition(flow_id, "regen_done")
+        # Single transition to avoid double lock acquisition (IMAGES_APPROVED → GENERATING_IMAGES)
+        await fsm.transition(flow_id, "request_and_start_regen")
         await query.edit_message_text("Regenerando slides selecionados...")
 
         from app.tasks.celery_app import celery_app

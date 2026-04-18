@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    env:
+      TELEGRAM_BOT_TOKEN: test-telegram-token
+      TELEGRAM_WEBHOOK_SECRET: test-webhook-secret
+      ALLOWED_TELEGRAM_USER_IDS: "123456789"
+      REGISTER_WEBHOOK: "false"
+      REDIS_URL: redis://localhost:6379/0
+      PUBLIC_WEBHOOK_URL: https://example.test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Run Ruff
+        run: .venv/bin/ruff check app tests
+
+      - name: Run mypy
+        run: .venv/bin/mypy app
+
+      - name: Run pytest
+        run: .venv/bin/pytest tests/ -v

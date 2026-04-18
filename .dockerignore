@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.env
+.git/
+tests/
+CLAUDE.md
+SDD.md
+infra/
+.dockerignore

@@ -5,17 +5,25 @@ Produces a native-style Bambu project: one object with two parts
 print settings pre-configured, so Bambu Studio opens it print-ready.
 """
 
+import argparse
 import json
 import re
 import zipfile
 from pathlib import Path
 
 HERE = Path(__file__).parent
-OUT = HERE / "PLJ_Carpentry_Keychain.3mf"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--base-color", default="#1A1A1A")
+parser.add_argument("--logo-color", default="#F2A900")
+parser.add_argument("--out", default="PLJ_Carpentry_Keychain.3mf")
+args = parser.parse_args()
+
+OUT = HERE / args.out
 
 STLS = [
-    ("keychain_base_black.stl", "base_black", 1, "#1A1A1A"),
-    ("keychain_logo_yellow.stl", "logo_yellow", 2, "#F2A900"),
+    ("keychain_base_black.stl", "base", 1, args.base_color),
+    ("keychain_logo_yellow.stl", "logo_relief", 2, args.logo_color),
 ]
 
 PLATE_XY = 128  # object centered on a 256 mm plate
@@ -24,7 +32,7 @@ PLATE_XY = 128  # object centered on a 256 mm plate
 # Values follow Bambu Studio's project_settings.config key names.
 PROJECT_SETTINGS = {
     "curr_bed_type": "Textured PEI Plate",
-    "filament_colour": ["#1A1A1A", "#F2A900"],
+    "filament_colour": [args.base_color, args.logo_color],
     "filament_type": ["PLA", "PLA"],
     "filament_diameter": ["1.75", "1.75"],
     "layer_height": "0.2",

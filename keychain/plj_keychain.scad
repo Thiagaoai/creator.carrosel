@@ -164,9 +164,12 @@ module logo_3d() {
 
 if (part == "base")   base_3d();
 if (part == "logo")   logo_3d();
+base_color = "black";  // preview only — print colors come from the 3MF
+logo_color = "gold";
+
 if (part == "all") {
-    color("black")  base_3d();
-    color("gold")   logo_3d();
+    color(base_color) base_3d();
+    color(logo_color) logo_3d();
 }
 if (part == "logo2d") logo_2d();
 if (part == "base2d") difference() { base_2d(); base_hole_2d(); }

@@ -236,6 +236,12 @@ if (part == "base") {
     lid_yellow_3d();
 } else if (part == "logo") {
     logo_2d();
+} else if (part == "layer1") {
+    // what the slicer Preview shows on the lid's first layer (top view)
+    color("#3A3A3A") linear_extrude(height = 0.2)
+        projection(cut = true) translate([0, 0, -0.1]) lid_black_3d();
+    color("#F0A500") translate([0, 0, 0.25]) linear_extrude(height = 0.2)
+        projection(cut = true) translate([0, 0, -0.1]) lid_yellow_3d();
 } else if (part == "lid_display") {
     // lid flipped to how it looks in use (logo facing up)
     rotate([0, 180, 0]) translate([0, 0, -lid_h]) {

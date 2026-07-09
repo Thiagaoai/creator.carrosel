@@ -11,8 +11,8 @@ $fn = 128;
 
 // ---- global dimensions (mm) ----
 disc_r        = 25;    // 50 mm tag
-base_h        = 2.4;   // black body thickness (12 layers @ 0.2)
-relief_h      = 1.2;   // raised logo height (6 layers @ 0.2)
+base_h        = 3.2;   // black body thickness (16 layers @ 0.2) — stiff, no warping
+relief_h      = 1.6;   // raised logo height (8 layers @ 0.2) — bold relief
 embed         = 0.04;  // logo sinks into base to fuse parts (kills z-fighting)
 
 loop_c        = [0, disc_r + 1.5];

@@ -12,8 +12,8 @@ HERE = Path(__file__).parent
 OUT = HERE / "PLJ_Carpentry_Keychain.3mf"
 
 STLS = [
-    ("keychain_base_black.stl", "base_black", 1),
-    ("keychain_logo_yellow.stl", "logo_yellow", 2),
+    ("keychain_base_black.stl", "base_black", 1, "#1A1A1A"),
+    ("keychain_logo_yellow.stl", "logo_yellow", 2, "#F2A900"),
 ]
 
 VERTEX_RE = re.compile(
@@ -43,7 +43,8 @@ def parse_ascii_stl(path: Path) -> tuple[list[tuple], list[tuple]]:
     return verts, tris
 
 
-def mesh_xml(obj_id: int, verts: list, tris: list) -> str:
+def mesh_xml(obj_id: int, verts: list, tris: list, mat_id: int,
+             mat_index: int) -> str:
     vs = "".join(
         f'<vertex x="{x:g}" y="{y:g}" z="{z:g}"/>' for x, y, z in verts
     )
@@ -51,19 +52,29 @@ def mesh_xml(obj_id: int, verts: list, tris: list) -> str:
         f'<triangle v1="{a}" v2="{b}" v3="{c}"/>' for a, b, c in tris
     )
     return (
-        f'<object id="{obj_id}" type="model">'
+        f'<object id="{obj_id}" type="model" '
+        f'pid="{mat_id}" pindex="{mat_index}">'
         f"<mesh><vertices>{vs}</vertices>"
         f"<triangles>{ts}</triangles></mesh></object>"
     )
 
 
 def build() -> None:
+    mat_id = len(STLS) + 2  # resource id for the shared basematerials group
     objects = []
-    for fname, _, _ in STLS:
+    for i, (fname, _, _, _) in enumerate(STLS):
         verts, tris = parse_ascii_stl(HERE / fname)
-        objects.append(mesh_xml(len(objects) + 1, verts, tris))
+        objects.append(mesh_xml(len(objects) + 1, verts, tris, mat_id, i))
         print(f"{fname}: {len(verts)} vertices, {len(tris)} triangles")
 
+    materials = (
+        f'<basematerials id="{mat_id}">'
+        + "".join(
+            f'<base name="{name}" displaycolor="{color}FF"/>'
+            for _, name, _, color in STLS
+        )
+        + "</basematerials>"
+    )
     identity = "1 0 0 0 1 0 0 0 1 0 0 0"
     assembly_id = len(objects) + 1
     components = "".join(
@@ -76,7 +87,7 @@ def build() -> None:
         'xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">'
         "<metadata name=\"Title\">PLJ Carpentry Keychain</metadata>"
         "<metadata name=\"Application\">OpenSCAD+script</metadata>"
-        f"<resources>{''.join(objects)}"
+        f"<resources>{materials}{''.join(objects)}"
         f'<object id="{assembly_id}" type="model">'
         f"<components>{components}</components></object>"
         "</resources>"
@@ -90,7 +101,7 @@ def build() -> None:
         f'<metadata key="name" value="{name}"/>'
         f'<metadata key="extruder" value="{extruder}"/>'
         "</part>"
-        for i, (_, name, extruder) in enumerate(STLS)
+        for i, (_, name, extruder, _) in enumerate(STLS)
     )
     model_settings = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'

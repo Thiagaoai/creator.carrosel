@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="56.0mm" height="66.0mm"
+     viewBox="0 0 56.0 66.0">
+  <title>Light House Church keychain — 50 mm tag</title>
+  <!-- All units are real millimeters. Font: Anton (Google Fonts).
+       Text is live on a circular path; use Path > Object to Path in
+       Inkscape to convert it to outlines. -->
+  <defs>
+    <path id="textarc" d="M 5.300,37.000 A 22.7 22.7 0 0 0 50.700,37.000"/>
+  </defs>
+
+  <g id="base-blue">
+    <path d="M 22.589,12.593 A 25.0 25.0 0 1 0 33.411,12.593 A 6.0 6.0 0 1 0 22.589,12.593 Z M 28.000,7.000 A 3.0 3.0 0 1 1 28.000,13.000 A 3.0 3.0 0 1 1 28.000,7.000 Z" fill="#0F4C9C" fill-rule="evenodd"/>
+  </g>
+
+  <g id="relief-white">
+    <path id="ring" d="M 6.761,42.738 A 22.0 22.0 0 1 1 49.239,42.738 L 47.115,42.164 A 19.8 19.8 0 1 0 8.885,42.164 Z" fill="#FFFFFF"/>
+    <path id="tower" d="M 25.400,28.300 L 30.600,28.300 L 33.300,46.500 L 32.858,46.500 L 32.417,46.435 L 31.975,46.222 L 31.533,46.021 L 31.092,45.830 L 30.650,45.650 L 30.208,45.480 L 29.767,45.321 L 29.325,45.171 L 28.883,45.031 L 28.442,44.900 L 28.000,44.779 L 27.558,44.667 L 27.117,44.564 L 26.675,44.470 L 26.233,44.384 L 25.792,44.308 L 25.350,44.240 L 24.908,44.181 L 24.467,44.130 L 24.025,44.087 L 23.583,44.053 L 23.142,44.028 L 22.700,44.010 Z" fill="#FFFFFF"/>
+    <path d="M 31.000,25.800 L 35.800,25.800 L 35.800,27.800 L 31.000,27.800 Z" fill="#FFFFFF"/>
+    <path d="M 29.414,23.972 L 32.808,20.577 L 34.223,21.992 L 30.828,25.386 Z" fill="#FFFFFF"/>
+    <path d="M 27.000,23.800 L 27.000,19.000 L 29.000,19.000 L 29.000,23.800 Z" fill="#FFFFFF"/>
+    <path d="M 25.172,25.386 L 21.777,21.992 L 23.192,20.577 L 26.586,23.972 Z" fill="#FFFFFF"/>
+    <path d="M 25.000,27.800 L 20.200,27.800 L 20.200,25.800 L 25.000,25.800 Z" fill="#FFFFFF"/>
+    <text font-family="Anton" font-size="6.111"
+          letter-spacing="0.489" fill="#FFFFFF"
+          text-anchor="middle">
+      <textPath xlink:href="#textarc" href="#textarc" startOffset="50%">LIGHT HOUSE CHURCH</textPath>
+    </text>
+  </g>
+</svg>

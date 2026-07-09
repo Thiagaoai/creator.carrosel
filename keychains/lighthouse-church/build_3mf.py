@@ -50,7 +50,9 @@ def read_binary_stl(path: Path) -> tuple[list[tuple[float, float, float]], list[
     return verts, tris
 
 
-def mesh_xml(object_id: int, name: str, verts, tris) -> str:
+def mesh_xml(object_id: int, name: str, verts, tris, pindex: int) -> str:
+    """Mesh object bound to base material `pindex` so the part shows its
+    real color in ANY slicer, even on a plain geometry import."""
     v_xml = "".join(
         f'<vertex x="{x:g}" y="{y:g}" z="{z:g}"/>' for x, y, z in verts
     )
@@ -58,7 +60,7 @@ def mesh_xml(object_id: int, name: str, verts, tris) -> str:
         f'<triangle v1="{a}" v2="{b}" v3="{c}"/>' for a, b, c in tris
     )
     return (
-        f'<object id="{object_id}" type="model">'
+        f'<object id="{object_id}" type="model" pid="5" pindex="{pindex}">'
         f"<mesh><vertices>{v_xml}</vertices>"
         f"<triangles>{t_xml}</triangles></mesh></object>"
     )
@@ -77,8 +79,12 @@ def build() -> None:
         '<metadata name="BambuStudio:3mfVersion">1</metadata>'
         '<metadata name="Title">lighthouse_church_keychain</metadata>'
         "<resources>"
-        + mesh_xml(1, "base_blue", base_v, base_t)
-        + mesh_xml(2, "relief_white", rel_v, rel_t)
+        '<basematerials id="5">'
+        f'<base name="PLA Blue" displaycolor="{BLUE}FF"/>'
+        f'<base name="PLA White" displaycolor="{WHITE}FF"/>'
+        "</basematerials>"
+        + mesh_xml(1, "base_blue", base_v, base_t, 0)
+        + mesh_xml(2, "relief_white", rel_v, rel_t, 1)
         + '<object id="3" type="model"><components>'
         '<component objectid="1" transform="1 0 0 0 1 0 0 0 1 0 0 0"/>'
         '<component objectid="2" transform="1 0 0 0 1 0 0 0 1 0 0 0"/>'
@@ -123,45 +129,108 @@ def build() -> None:
 """
 
     project_settings = {
+        # --- identity ---
+        "name": "lighthouse_church_keychain",
+        "from": "project",
+        "version": "01.10.01.50",
+        "is_custom_defined": "0",
+        # --- printer ---
         "printer_settings_id": "Bambu Lab A1 0.4 nozzle",
-        "print_settings_id": "0.20mm Standard @BBL A1",
-        "filament_settings_id": [
-            "Bambu PLA Basic @BBL A1",
-            "Bambu PLA Basic @BBL A1",
-        ],
         "printer_model": "Bambu Lab A1",
         "printer_variant": "0.4",
+        "printer_technology": "FFF",
+        "gcode_flavor": "marlin",
         "nozzle_diameter": ["0.4"],
+        "nozzle_type": "stainless_steel",
+        "printable_height": "256",
         "curr_bed_type": "Textured PEI Plate",
+        # --- process ---
+        "print_settings_id": "0.20mm Standard @BBL A1",
         "layer_height": "0.2",
         "initial_layer_print_height": "0.2",
+        "line_width": "0.42",
+        "initial_layer_line_width": "0.5",
         "wall_loops": "3",
+        "top_shell_layers": "4",
+        "top_shell_thickness": "0.8",
+        "bottom_shell_layers": "3",
+        "bottom_shell_thickness": "0",
         "sparse_infill_density": "15%",
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "normal(auto)",
         "brim_type": "no_brim",
+        "brim_width": "5",
+        "skirt_loops": "1",
         "seam_position": "back",
         "ironing_type": "topmost",
+        "ironing_pattern": "zig-zag",
         "ironing_flow": "10%",
         "ironing_speed": "30",
         "ironing_spacing": "0.15",
         "elefant_foot_compensation": "0.1",
-        "top_shell_layers": "4",
-        "bottom_shell_layers": "3",
+        "only_one_wall_first_layer": "1",
+        "wall_sequence": "inner wall/outer wall",
+        "detect_thin_wall": "1",
+        "gap_infill_speed": "250",
+        "outer_wall_speed": "200",
+        "inner_wall_speed": "300",
+        "top_surface_speed": "200",
+        "initial_layer_speed": "50",
+        "initial_layer_infill_speed": "105",
+        "sparse_infill_speed": "270",
+        "internal_solid_infill_speed": "250",
+        "travel_speed": "700",
+        "resolution": "0.012",
+        "slice_closing_radius": "0.049",
+        "xy_contour_compensation": "0",
+        "xy_hole_compensation": "0",
+        # --- multi-color / flushing ---
+        "enable_prime_tower": "1",
+        "prime_tower_width": "25",
+        "prime_tower_brim_width": "3",
+        "prime_volume": "45",
+        "flush_volumes_matrix": ["0", "280", "280", "0"],
+        "flush_volumes_vector": ["140", "140"],
+        "flush_multiplier": "1",
+        # --- filaments (arrays: one entry per filament slot) ---
+        "filament_settings_id": [
+            "Bambu PLA Basic @BBL A1",
+            "Bambu PLA Basic @BBL A1",
+        ],
+        "filament_type": ["PLA", "PLA"],
+        "filament_vendor": ["Bambu Lab", "Bambu Lab"],
+        "filament_colour": [BLUE, WHITE],
+        "filament_diameter": ["1.75", "1.75"],
+        "filament_density": ["1.26", "1.26"],
+        "filament_flow_ratio": ["0.98", "0.98"],
+        "filament_max_volumetric_speed": ["21", "21"],
+        "filament_cost": ["24.99", "24.99"],
+        "filament_is_support": ["0", "0"],
+        "filament_soluble": ["0", "0"],
+        "filament_shrink": ["100%", "100%"],
+        "temperature_vitrification": ["45", "45"],
+        "nozzle_temperature": ["220", "220"],
+        "nozzle_temperature_initial_layer": ["220", "220"],
+        "nozzle_temperature_range_low": ["190", "190"],
+        "nozzle_temperature_range_high": ["240", "240"],
+        "fan_min_speed": ["60", "60"],
+        "fan_max_speed": ["80", "80"],
+        "close_fan_the_first_x_layers": ["1", "1"],
+        "slow_down_layer_time": ["4", "4"],
+        "slow_down_min_speed": ["20", "20"],
+        "reduce_fan_stop_start_freq": ["1", "1"],
+        # --- bed temperatures (65 C on every plate type) ---
         "textured_plate_temp": ["65", "65"],
         "textured_plate_temp_initial_layer": ["65", "65"],
         "hot_plate_temp": ["65", "65"],
         "hot_plate_temp_initial_layer": ["65", "65"],
         "cool_plate_temp": ["65", "65"],
         "cool_plate_temp_initial_layer": ["65", "65"],
-        "nozzle_temperature": ["220", "220"],
-        "nozzle_temperature_initial_layer": ["220", "220"],
-        "filament_type": ["PLA", "PLA"],
-        "filament_colour": [BLUE, WHITE],
-        "flush_volumes_matrix": ["0", "280", "280", "0"],
-        "version": "01.10.01.50",
-        "name": "lighthouse_church_keychain",
-        "from": "project",
+        "eng_plate_temp": ["65", "65"],
+        "eng_plate_temp_initial_layer": ["65", "65"],
+        "supertack_plate_temp": ["65", "65"],
+        "supertack_plate_temp_initial_layer": ["65", "65"],
     }
 
     content_types = (

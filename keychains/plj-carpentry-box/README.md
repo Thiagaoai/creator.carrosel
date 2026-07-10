@@ -10,21 +10,26 @@ CARPENTRY" in Anton) as a flush yellow inlay on the lid.
 | --- | --- |
 | `plj_gift_box.3mf` | Bambu Studio **project** — open and print. Base + lid on one plate, filament 1 = black, filament 2 = yellow, settings embedded. |
 | `base_black.stl` | Box base (filament 1) |
-| `lid_black.stl` | Lid body (filament 1), print orientation (top face down) |
+| `lid_black.stl` | Sliding lid body (filament 1), prints top-face-down |
 | `lid_logo_yellow.stl` | Yellow logo inlay (filament 2), same orientation |
 | `plj_gift_box.scad` | Parametric OpenSCAD source |
 | `preview_lid.png` / `preview_base.png` / `preview_logo.png` | Design previews |
 | `build_box_3mf.py` | Rebuilds the .3mf from the STLs |
 
-## Design
+## Design — SLIDING LID
 
-- Outer size: **66.6 x 86.6 x ~14 mm closed** (lid telescopes over the base)
-- Base: 62 x 82 x 11 mm, 2 mm walls, 4 mm floor
+- Outer size: **62 x 82 x 15.5 mm closed**
+- The lid runs inside grooves in the side walls (matchbox style):
+  pull it back until the detent bump CLICKS to close; push it
+  forward (thumb on the grip grooves or in the back-rim scoop) to
+  open. The keychain stays seated and protected inside.
+- Base: 4 mm floor, groove floor at 11 mm, 1.2 mm rim above the lid;
+  groove ceilings are 1.7 mm micro-bridges (no support needed)
+- Lid: 3.0 mm plate, 55.4 x 79 mm, 0.3 mm side/top clearance,
+  detent recess underneath + 3 grip grooves on the face
 - Keychain seat: 2.2 mm recess shaped like the tag (0.5 mm clearance),
   with room for the metal ring above the loop and a finger notch below
   the tag to lift it out
-- Lid: 2.4 mm face + 8 mm skirt, 0.25 mm fit clearance per side,
-  finger notches on both short sides for easy opening
 - Logo: 0.6 mm flush inlay (3 layers) on the OUTSIDE face of the lid;
   the lid prints top-face-down on the Textured PEI plate so the face
   gets the leather-look texture. The logo is mirrored in the mesh on

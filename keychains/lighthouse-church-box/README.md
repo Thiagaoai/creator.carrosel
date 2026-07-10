@@ -1,6 +1,6 @@
 # Light House Church — presentation gift box (Bambu A1 / A1 mini / P1S)
 
-Same box as the PLJ Carpentry one (`../plj-carpentry-box/`), with the
+Same SLIDING-LID box as the PLJ Carpentry one (`../plj-carpentry-box/`), with the
 Light House Church logo instead: blue PLA body, white flush logo
 inlay on the lid (ring + lighthouse beacon + "LIGHT HOUSE CHURCH" in
 Anton — reused straight from the keychain source, scaled 1.2x).
